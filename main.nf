@@ -1,6 +1,7 @@
 nextflow.enable.dsl = 2
 
 include { FASTQC } from './modules/local/fastqc'
+include { MULTIQC } from './modules/local/multiqc'
 
 workflow {
     reads_ch = Channel.of(
@@ -14,4 +15,12 @@ workflow {
     )
 
     FASTQC(reads_ch)
+
+
+    multiqc_input_ch = FASTQC.out.zip
+        .map { sample_id, reports -> reports }
+        .flatten()
+        .collect()
+
+    MULTIQC(multiqc_input_ch)
 }
