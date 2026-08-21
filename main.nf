@@ -1,19 +1,17 @@
 nextflow.enable.dsl = 2
 
-params.outdir = 'results'
-
-process CHECK_SETUP {
-    publishDir "${params.outdir}/setup", mode: 'copy'
-
-    output:
-    path 'setup_check.txt'
-
-    script:
-    """
-    echo "RNA-seq pipeline environment is ready" > setup_check.txt
-    """
-}
+include { FASTQC } from './modules/local/fastqc'
 
 workflow {
-    CHECK_SETUP()
+    reads_ch = Channel.of(
+        tuple(
+            'test',
+            [
+                file(params.fastq_1, checkIfExists: true),
+                file(params.fastq_2, checkIfExists: true)
+            ]
+        )
+    )
+
+    FASTQC(reads_ch)
 }
