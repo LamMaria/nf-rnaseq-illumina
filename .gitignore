@@ -5,3 +5,4 @@ results/
 *.trace
 *.timeline
 .DS_Store
+references/

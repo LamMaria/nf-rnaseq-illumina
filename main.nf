@@ -4,6 +4,7 @@ include { FASTQC } from './modules/local/fastqc'
 include { FASTQC as FASTQC_TRIMMED } from './modules/local/fastqc'
 include { FASTP } from './modules/local/fastp'
 include { MULTIQC } from './modules/local/multiqc'
+include { STAR_GENOMEGENERATE } from './modules/local/star_genomegenerate'
 
 workflow {
     reads_ch = Channel.of(
@@ -31,4 +32,14 @@ workflow {
         .collect()
 
     MULTIQC(multiqc_input_ch)
+
+    reference_ch = Channel.of(
+        tuple(
+            'arabidopsis_tair10_ensembl60',
+            file(params.fasta, checkIfExists: true),
+            file(params.gtf, checkIfExists: true)
+        )
+    )
+
+    STAR_GENOMEGENERATE(reference_ch)
 }
