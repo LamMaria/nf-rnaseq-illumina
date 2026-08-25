@@ -5,33 +5,25 @@ include { FASTQC as FASTQC_TRIMMED } from './modules/local/fastqc'
 include { FASTP } from './modules/local/fastp'
 include { MULTIQC } from './modules/local/multiqc'
 include { STAR_GENOMEGENERATE } from './modules/local/star_genomegenerate'
+include { STAR_ALIGN } from './modules/local/star_align'
 
 workflow {
-    reads_ch = Channel.of(
-        tuple(
-            'test',
-            [
-                file(params.fastq_1, checkIfExists: true),
-                file(params.fastq_2, checkIfExists: true)
-            ]
-        )
-    )
+    samples_ch = Channel
+        .fromPath(params.samplesheet, checkIfExists: true)
+        .splitCsv(header: true)
+        .map { row ->
+            tuple(
+                row.sample,
+                [
+                    file(row.fastq_1, checkIfExists: true),
+                    file(row.fastq_2, checkIfExists: true)
+                ]
+            )
+        }
 
-    FASTQC(reads_ch)
-
-    FASTP(reads_ch)
-
+    FASTQC(samples_ch)
+    FASTP(samples_ch)
     FASTQC_TRIMMED(FASTP.out.reads)
-
-    multiqc_input_ch = FASTQC.out.zip
-        .mix(FASTQC_TRIMMED.out.zip)
-        .mix(FASTP.out.html)
-        .mix(FASTP.out.json)
-        .map { sample_id, reports -> reports }
-        .flatten()
-        .collect()
-
-    MULTIQC(multiqc_input_ch)
 
     reference_ch = Channel.of(
         tuple(
@@ -42,4 +34,19 @@ workflow {
     )
 
     STAR_GENOMEGENERATE(reference_ch)
+
+    star_alignment_input_ch = FASTP.out.reads.combine(STAR_GENOMEGENERATE.out.index)
+
+    STAR_ALIGN(star_alignment_input_ch)
+
+    multiqc_input_ch = FASTQC.out.zip
+        .mix(FASTQC_TRIMMED.out.zip)
+        .mix(FASTP.out.html)
+        .mix(FASTP.out.json)
+        .mix(STAR_ALIGN.out.log_final)
+        .map { sample_id, reports -> reports }
+        .flatten()
+        .collect()
+
+    MULTIQC(multiqc_input_ch)
 }

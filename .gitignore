@@ -6,3 +6,4 @@ results/
 *.timeline
 .DS_Store
 references/
+data/raw/

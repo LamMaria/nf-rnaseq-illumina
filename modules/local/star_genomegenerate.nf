@@ -24,6 +24,7 @@ process STAR_GENOMEGENERATE {
         --genomeFastaFiles ${fasta} \
         --sjdbGTFfile ${gtf} \
         --sjdbOverhang ${sjdb_overhang} \
+        --genomeSAindexNbases ${params.star_sa_index_nbases} \
         --limitGenomeGenerateRAM 4000000000
     """
 }
