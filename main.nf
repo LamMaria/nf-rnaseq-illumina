@@ -7,6 +7,8 @@ include { MULTIQC } from './modules/local/multiqc'
 include { STAR_GENOMEGENERATE } from './modules/local/star_genomegenerate'
 include { STAR_ALIGN } from './modules/local/star_align'
 include { SAMTOOLS_FLAGSTAT } from './modules/local/samtools_flagstat'
+include { SAMTOOLS_INDEX } from './modules/local/samtools_index'
+
 
 workflow {
     samples_ch = Channel
@@ -40,6 +42,7 @@ workflow {
 
     STAR_ALIGN(star_alignment_input_ch)
     SAMTOOLS_FLAGSTAT(STAR_ALIGN.out.bam)
+    SAMTOOLS_INDEX(STAR_ALIGN.out.bam)
 
     multiqc_input_ch = FASTQC.out.zip
         .mix(FASTQC_TRIMMED.out.zip)

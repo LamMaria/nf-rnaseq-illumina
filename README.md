@@ -30,6 +30,7 @@ Samplesheet
 - STAR genome index generation from FASTA and GTF files
 - Splice-aware RNA-seq alignment with STAR
 - Coordinate-sorted BAM output
+- BAM indexing with samtools for efficient alignment inspection.
 - Consolidated quality and alignment reporting with MultiQC
 - Task caching and restart support with `-resume`
 
@@ -122,6 +123,9 @@ results/
 │   ├── Coordinate-sorted BAM file
 │   ├── STAR Log.final.out alignment metrics
 │   └── Detected splice junctions
+├── samtools/
+│   ├── samtools flagstat alignment summary
+│   └── BAM index (.bai)
 └── multiqc/
     ├── multiqc_report.html
     └── multiqc_report_data/
@@ -162,7 +166,8 @@ nf-rnaseq-illumina/
 │       ├── multiqc.nf
 │       ├── star_align.nf
 │       ├── star_genomegenerate.nf
-│       └── samtools_flagstat.nf 
+│       ├── samtools_flagstat.nf
+│       └── samtools_index.nf 
 ├── .gitignore
 ├── main.nf
 ├── nextflow.config
@@ -178,6 +183,7 @@ nf-rnaseq-illumina/
 - [x] STAR alignment
 - [x] MultiQC aggregation
 - [x] Alignment quality control with samtools
+- [x] BAM indexing for alignment inspection
 - [ ] Gene-level quantification
 - [ ] Differential expression analysis with biological replicates
 - [ ] Automated tests and continuous integration
