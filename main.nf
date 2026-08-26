@@ -6,6 +6,7 @@ include { FASTP } from './modules/local/fastp'
 include { MULTIQC } from './modules/local/multiqc'
 include { STAR_GENOMEGENERATE } from './modules/local/star_genomegenerate'
 include { STAR_ALIGN } from './modules/local/star_align'
+include { SAMTOOLS_FLAGSTAT } from './modules/local/samtools_flagstat'
 
 workflow {
     samples_ch = Channel
@@ -38,12 +39,14 @@ workflow {
     star_alignment_input_ch = FASTP.out.reads.combine(STAR_GENOMEGENERATE.out.index)
 
     STAR_ALIGN(star_alignment_input_ch)
+    SAMTOOLS_FLAGSTAT(STAR_ALIGN.out.bam)
 
     multiqc_input_ch = FASTQC.out.zip
         .mix(FASTQC_TRIMMED.out.zip)
         .mix(FASTP.out.html)
         .mix(FASTP.out.json)
         .mix(STAR_ALIGN.out.log_final)
+        .mix(SAMTOOLS_FLAGSTAT.out.flagstat)
         .map { sample_id, reports -> reports }
         .flatten()
         .collect()

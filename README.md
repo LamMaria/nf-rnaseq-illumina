@@ -41,6 +41,7 @@ Samplesheet
 | FastQC | 0.12.1 | FASTQ quality control |
 | fastp | 1.1.0 | Adapter and quality trimming |
 | STAR | 2.7.11b | Splice-aware alignment |
+| samtools | 1.21 | Alignment quality control |
 | MultiQC | 1.32 | Aggregated reporting |
 | Docker | Required | Container execution |
 
@@ -139,6 +140,9 @@ The pipeline was validated with paired-end *Arabidopsis thaliana* RNA-seq data f
 | GC content | 47.03% | 47.02% |
 | Adapter-trimmed reads | — | 560,198 |
 | Uniquely mapped reads | — | 89.21% |
+| Primary mapped reads (samtools) | — | 98.99% |
+| Properly paired reads (samtools) | — | 98.99% |
+| Singleton reads (samtools) | — | 255 |
 | Multi-mapped reads | — | 9.78% |
 | Mismatch rate per base | — | 0.12% |
 | Annotated splice junctions | — | 99.6% |
@@ -157,7 +161,8 @@ nf-rnaseq-illumina/
 │       ├── fastqc.nf
 │       ├── multiqc.nf
 │       ├── star_align.nf
-│       └── star_genomegenerate.nf
+│       ├── star_genomegenerate.nf
+│       └── samtools_flagstat.nf 
 ├── .gitignore
 ├── main.nf
 ├── nextflow.config
@@ -172,7 +177,7 @@ nf-rnaseq-illumina/
 - [x] STAR genome index generation
 - [x] STAR alignment
 - [x] MultiQC aggregation
-- [ ] Alignment quality control with samtools
+- [x] Alignment quality control with samtools
 - [ ] Gene-level quantification
 - [ ] Differential expression analysis with biological replicates
 - [ ] Automated tests and continuous integration

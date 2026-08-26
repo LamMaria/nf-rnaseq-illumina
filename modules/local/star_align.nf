@@ -22,6 +22,7 @@ process STAR_ALIGN {
         --runThreadN ${task.cpus} \
         --outFileNamePrefix ${sample_id}. \
         --outSAMtype BAM SortedByCoordinate \
+        --outSAMunmapped Within KeepPairs \
         --outSAMattributes NH HI AS nM XS
     """
 }
