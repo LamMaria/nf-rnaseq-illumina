@@ -32,6 +32,7 @@ Samplesheet
 - Coordinate-sorted BAM output
 - BAM indexing with samtools for efficient alignment inspection.
 - Consolidated quality and alignment reporting with MultiQC
+- Gene-level paired-end quantification with featureCounts
 - Task caching and restart support with `-resume`
 
 ## Software
@@ -44,6 +45,7 @@ Samplesheet
 | STAR | 2.7.11b | Splice-aware alignment |
 | samtools | 1.21 | Alignment quality control |
 | MultiQC | 1.32 | Aggregated reporting |
+| featureCounts | 2.0.6 | Gene-level quantification |
 | Docker | Required | Container execution |
 
 ## Requirements
@@ -126,6 +128,9 @@ results/
 ├── samtools/
 │   ├── samtools flagstat alignment summary
 │   └── BAM index (.bai)
+├── featurecounts/
+│   ├── Gene-level count table
+│   └── Assignment summary
 └── multiqc/
     ├── multiqc_report.html
     └── multiqc_report_data/
@@ -150,6 +155,9 @@ The pipeline was validated with paired-end *Arabidopsis thaliana* RNA-seq data f
 | Multi-mapped reads | — | 9.78% |
 | Mismatch rate per base | — | 0.12% |
 | Annotated splice junctions | — | 99.6% |
+| Fragments assigned to genes | — | 28.77 M |
+| Unassigned multi-mapping fragments | — | 6.95 M |
+| Unassigned ambiguous fragments | — | 1.07 M |
 
 This validation run demonstrates workflow reproducibility and technical quality control. It is not presented as a biological differential-expression analysis.
 
@@ -167,7 +175,9 @@ nf-rnaseq-illumina/
 │       ├── star_align.nf
 │       ├── star_genomegenerate.nf
 │       ├── samtools_flagstat.nf
-│       └── samtools_index.nf 
+│       ├── samtools_index.nf
+│       └── featurecounts.nf
+
 ├── .gitignore
 ├── main.nf
 ├── nextflow.config

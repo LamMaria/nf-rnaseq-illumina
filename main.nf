@@ -8,6 +8,7 @@ include { STAR_GENOMEGENERATE } from './modules/local/star_genomegenerate'
 include { STAR_ALIGN } from './modules/local/star_align'
 include { SAMTOOLS_FLAGSTAT } from './modules/local/samtools_flagstat'
 include { SAMTOOLS_INDEX } from './modules/local/samtools_index'
+include { FEATURECOUNTS } from './modules/local/featurecounts'
 
 
 workflow {
@@ -41,6 +42,8 @@ workflow {
     star_alignment_input_ch = FASTP.out.reads.combine(STAR_GENOMEGENERATE.out.index)
 
     STAR_ALIGN(star_alignment_input_ch)
+    gtf_ch = Channel.value(file(params.gtf, checkIfExists: true))
+    FEATURECOUNTS(STAR_ALIGN.out.bam, gtf_ch)
     SAMTOOLS_FLAGSTAT(STAR_ALIGN.out.bam)
     SAMTOOLS_INDEX(STAR_ALIGN.out.bam)
 
@@ -50,6 +53,7 @@ workflow {
         .mix(FASTP.out.json)
         .mix(STAR_ALIGN.out.log_final)
         .mix(SAMTOOLS_FLAGSTAT.out.flagstat)
+        .mix(FEATURECOUNTS.out.summary)
         .map { sample_id, reports -> reports }
         .flatten()
         .collect()
