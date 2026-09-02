@@ -1,2 +1,7 @@
-sample,fastq_1,fastq_2
-SRR8554919,data/raw/GSE126331/SRR8554919_1.fastq.gz,data/raw/GSE126331/SRR8554919_2.fastq.gz
+sample,fastq_1,fastq_2,condition,replicate
+SRR8554918,data/raw/GSE126331/SRR8554918_1.fastq.gz,data/raw/GSE126331/SRR8554918_2.fastq.gz,M4,1
+SRR8554919,data/raw/GSE126331/SRR8554919_1.fastq.gz,data/raw/GSE126331/SRR8554919_2.fastq.gz,M4,2
+SRR8554920,data/raw/GSE126331/SRR8554920_1.fastq.gz,data/raw/GSE126331/SRR8554920_2.fastq.gz,M4,3
+SRR8554909,data/raw/GSE126331/SRR8554909_1.fastq.gz,data/raw/GSE126331/SRR8554909_2.fastq.gz,G4,1
+SRR8554910,data/raw/GSE126331/SRR8554910_1.fastq.gz,data/raw/GSE126331/SRR8554910_2.fastq.gz,G4,2
+SRR8554911,data/raw/GSE126331/SRR8554911_1.fastq.gz,data/raw/GSE126331/SRR8554911_2.fastq.gz,G4,3
