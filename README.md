@@ -194,10 +194,16 @@ nf-rnaseq-illumina/
 - [x] MultiQC aggregation
 - [x] Alignment quality control with samtools
 - [x] BAM indexing for alignment inspection
-- [ ] Gene-level quantification
+- [x] Gene-level quantification with featureCounts
 - [ ] Differential expression analysis with biological replicates
 - [ ] Automated tests and continuous integration
 - [ ] Pipeline notifications for successful and failed runs
+
+## Public data re-analysis
+
+A complete six-sample *Arabidopsis thaliana* RNA-seq re-analysis, including DESeq2 differential expression and GO enrichment, is documented here:
+
+[View the G4 vs M4 RNA-seq re-analysis](docs/gse126331_deseq2.md)
 
 ## Author
 
